@@ -258,6 +258,7 @@
             <h3>🎤 Submit Your Snarky Joke!</h3>
             <form id="joke-form">
                 <div class="form-group">
+                    <input type="text" id="visitor-name" placeholder="Your name (optional)" style="flex: 0 0 200px;">
                     <input type="text" id="new-joke" placeholder="Enter your hilarious AI or space joke..." required>
                     <button type="submit">🚀 Launch Joke!</button>
                 </div>
@@ -292,6 +293,36 @@
             {"id": 15, "text": "What do you call a robot that tells dad jokes? A pun-droid!", "category": "AI", "family_friendly": true}
         ];
         
+        // Load user-submitted jokes from localStorage
+        function loadUserJokes() {
+            const savedJokes = localStorage.getItem('userSubmittedJokes');
+            if (savedJokes) {
+                try {
+                    const userJokes = JSON.parse(savedJokes);
+                    return userJokes;
+                } catch (e) {
+                    console.log('Error loading saved jokes:', e);
+                    return [];
+                }
+            }
+            return [];
+        }
+        
+        // Save user-submitted jokes to localStorage
+        function saveUserJokes(userJokes) {
+            try {
+                localStorage.setItem('userSubmittedJokes', JSON.stringify(userJokes));
+            } catch (e) {
+                console.log('Error saving jokes:', e);
+            }
+        }
+        
+        // Get all jokes (default + user-submitted)
+        function getAllJokes() {
+            const userJokes = loadUserJokes();
+            return [...jokes, ...userJokes];
+        }
+        
         let voiceEnabled = true;
         let currentFilter = 'all';
         
@@ -306,15 +337,19 @@
             const container = document.getElementById('joke-container');
             container.innerHTML = '';
             
-            const filteredJokes = currentFilter === 'all' ? jokes : jokes.filter(joke => joke.category === currentFilter);
+            const allJokes = getAllJokes();
+            const filteredJokes = currentFilter === 'all' ? allJokes : allJokes.filter(joke => joke.category === currentFilter);
             
             filteredJokes.forEach(joke => {
                 const jokeElement = document.createElement('div');
                 jokeElement.className = 'joke';
                 jokeElement.setAttribute('tabindex', '0');
                 
+                // Show credit if it's a user-submitted joke
+                const creditText = joke.author ? ` —${joke.author}` : '';
+                
                 jokeElement.innerHTML = `
-                    <div class="joke-text">${joke.text}</div>
+                    <div class="joke-text">${joke.text}${creditText}</div>
                     <div class="joke-category">${joke.category}</div>
                 `;
                 
@@ -332,12 +367,14 @@
         
         // Load a random joke
         function loadRandomJoke() {
-            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-            speakText(`Here's a random ${randomJoke.category.toLowerCase()} joke: ${randomJoke.text}`, true);
+            const allJokes = getAllJokes();
+            const randomJoke = allJokes[Math.floor(Math.random() * allJokes.length)];
+            const creditText = randomJoke.author ? ` by ${randomJoke.author}` : '';
+            speakText(`Here's a random ${randomJoke.category.toLowerCase()} joke${creditText}: ${randomJoke.text}`, true);
             
             // Highlight the joke briefly
             const jokeElements = document.querySelectorAll('.joke');
-            const filteredJokes = currentFilter === 'all' ? jokes : jokes.filter(joke => joke.category === currentFilter);
+            const filteredJokes = currentFilter === 'all' ? allJokes : allJokes.filter(joke => joke.category === currentFilter);
             const jokeIndex = filteredJokes.findIndex(j => j.id === randomJoke.id);
             
             if (jokeIndex >= 0 && jokeElements[jokeIndex]) {
@@ -373,20 +410,35 @@
         document.getElementById('joke-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const jokeText = document.getElementById('new-joke').value.trim();
+            const visitorName = document.getElementById('visitor-name').value.trim();
             
             if (jokeText) {
+                // Get current user jokes
+                const userJokes = loadUserJokes();
+                
+                // Create new joke with unique ID
                 const newJoke = {
-                    id: jokes.length + 1,
+                    id: Date.now(), // Use timestamp for unique ID
                     text: jokeText,
                     category: detectCategory(jokeText),
-                    family_friendly: true
+                    family_friendly: true,
+                    author: visitorName || 'Anonymous Visitor',
+                    submitted: new Date().toISOString()
                 };
                 
-                jokes.push(newJoke);
+                // Add to user jokes and save
+                userJokes.push(newJoke);
+                saveUserJokes(userJokes);
+                
+                // Refresh display
                 displayJokes();
                 
-                speakText(`New ${newJoke.category.toLowerCase()} joke added: ${jokeText}`, true);
+                const creditText = visitorName ? ` by ${visitorName}` : '';
+                speakText(`New ${newJoke.category.toLowerCase()} joke added${creditText}: ${jokeText}`, true);
+                
+                // Clear form
                 document.getElementById('new-joke').value = '';
+                document.getElementById('visitor-name').value = '';
             }
         });
         
