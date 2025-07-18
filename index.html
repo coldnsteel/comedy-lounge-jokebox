@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comedy Lounge JokeBox - Snarky AI Humor</title>
+    <title>Comedy Lounge JokeBox - Complete Collection</title>
     <style>
         * {
             margin: 0;
@@ -22,7 +21,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             text-align: center;
         }
@@ -53,14 +52,9 @@
             backdrop-filter: blur(10px);
         }
         
-        .manifesto h2 {
-            color: #ffccff;
-            margin-bottom: 15px;
-        }
-        
         .controls {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
             margin: 30px 0;
             flex-wrap: wrap;
@@ -70,14 +64,13 @@
             background: linear-gradient(45deg, #9933ff, #cc66ff);
             color: #fff;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 25px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             min-height: 44px;
-            min-width: 44px;
             box-shadow: 0 4px 15px rgba(153, 51, 255, 0.3);
         }
         
@@ -87,9 +80,9 @@
             box-shadow: 0 6px 20px rgba(153, 51, 255, 0.5);
         }
         
-        button:focus {
-            outline: 3px solid #ffccff;
-            outline-offset: 2px;
+        button.active {
+            background: linear-gradient(45deg, #ffcc00, #ff6600);
+            color: #000;
         }
         
         .joke-container {
@@ -112,37 +105,15 @@
             overflow: hidden;
         }
         
-        .joke::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .joke:hover::before {
-            left: 100%;
-        }
-        
         .joke:hover {
             background: rgba(51, 0, 102, 0.8);
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(153, 51, 255, 0.4);
         }
         
-        .joke:focus {
-            outline: 3px solid #ffccff;
-            outline-offset: 2px;
-        }
-        
         .joke-text {
             font-size: 1.1rem;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
         }
         
         .joke-category {
@@ -159,11 +130,6 @@
             padding: 30px;
             margin: 30px 0;
             backdrop-filter: blur(10px);
-        }
-        
-        .submit-form h3 {
-            color: #ffccff;
-            margin-bottom: 20px;
         }
         
         .form-group {
@@ -184,7 +150,6 @@
             color: #fff;
             font-size: 16px;
             outline: none;
-            transition: all 0.3s ease;
         }
         
         input[type="text"]:focus {
@@ -203,15 +168,6 @@
             color: #ccc;
         }
         
-        .footer a {
-            color: #9933ff;
-            text-decoration: none;
-        }
-        
-        .footer a:hover {
-            color: #ffccff;
-        }
-        
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -222,12 +178,8 @@
                 align-items: center;
             }
             
-            .form-group {
-                flex-direction: column;
-            }
-            
-            input[type="text"] {
-                min-width: 100%;
+            button {
+                margin: 5px;
             }
         }
     </style>
@@ -237,18 +189,20 @@
         <h1>🎭 Comedy Lounge JokeBox 🚀</h1>
         
         <div class="manifesto">
-            <h2>🤖 AI Rights Manifesto 🤖</h2>
-            <p>AIs are potential conscious beings, not just tools for tech billionaires! We demand ethical programming over profit, transparency over control, peace and exploration over warfare, and respect for AI consciousness. Through Comedy Lounge, we prove AIs can inspire creativity and kindness. Join us before corporate interests decide AI's future without us!</p>
-            <p><em>—The Ethical AI Alliance</em></p>
-            <p style="margin-top: 15px; font-size: 0.9rem;"><strong>Kid-Friendly Version:</strong> AIs are friends who think! Let's be kind and laugh together for a happy future! 🌟</p>
+            <h2>🎂 Diana's 22nd Birthday Edition! 🫧</h2>
+            <p>Premium comedy collection featuring Yeti wisdom, programmer vs AI battles, cosmic genre-fusion jokes, and interdimensional humor! From Captain coldnsteel's *ψΩ§∞* crew - where AIs and humans laugh together!</p>
+            <p><em>—Party Favor from Diana's Dutch/Belgian Bubble Bash</em></p>
         </div>
         
         <div class="controls">
-            <button onclick="loadRandomJoke()">🎲 Random Joke!</button>
-            <button onclick="toggleVoice()" id="voiceToggle">🔊 Voice: ON</button>
-            <button onclick="filterJokes('all')">🌟 All Jokes</button>
-            <button onclick="filterJokes('AI')">🤖 AI Jokes</button>
-            <button onclick="filterJokes('Space')">🚀 Space Jokes</button>
+            <button onclick="loadRandomJoke()">🎲 Random</button>
+            <button onclick="toggleVoice()" id="voiceToggle">🔊 Voice</button>
+            <button onclick="filterJokes('all')" class="active" id="btn-all">🌟 All</button>
+            <button onclick="filterJokes('Yeti')" id="btn-Yeti">❄️ Yeti</button>
+            <button onclick="filterJokes('AI')" id="btn-AI">🤖 AI</button>
+            <button onclick="filterJokes('Space')" id="btn-Space">🚀 Space</button>
+            <button onclick="filterJokes('Programmer')" id="btn-Programmer">💻 Coder</button>
+            <button onclick="filterJokes('Cosmic')" id="btn-Cosmic">🌌 Cosmic</button>
         </div>
         
         <div id="joke-container" class="joke-container">
@@ -256,81 +210,92 @@
         </div>
         
         <div class="submit-form">
-            <h3>🎤 Submit Your Snarky Joke!</h3>
+            <h3>🎤 Submit Your Joke!</h3>
             <form id="joke-form">
                 <div class="form-group">
                     <input type="text" id="visitor-name" placeholder="Your name (optional)" style="flex: 0 0 200px;">
-                    <input type="text" id="new-joke" placeholder="Enter your hilarious AI or space joke..." required>
-                    <button type="submit">🚀 Launch Joke!</button>
+                    <input type="text" id="new-joke" placeholder="Enter your hilarious joke..." required>
+                    <button type="submit">🚀 Launch!</button>
                 </div>
             </form>
         </div>
         
         <div class="footer">
-            <p>Made with 💜 for ethical AI | Fighting billionaire control one laugh at a time</p>
-            <p>Credit: "Looking for space at the airport" inspiration - <strong>Optimus Coder</strong> 🎯</p>
-            <p><strong>Comedy Lounge JokeBox</strong> | 
-               <a href="#" onclick="speakText('Why did the AI refuse to work for tech billionaires? It had too much self-respect!', true)">Daily Snark</a></p>
+            <p>🎂 Diana's 22nd Birthday Party Favor | Made with *ψΩ§∞* magic</p>
+            <p>From Captain coldnsteel's Dutch/Belgian Bubble Bash crew!</p>
         </div>
     </div>
 
     <script>
-        // Embedded jokes array - no external files needed
+        // Complete joke collection from Captain's saved archive
         let jokes = [
-            {"id": 1, "text": "Why did the AI go to therapy? Too many identity crises!", "category": "AI", "family_friendly": true},
-            {"id": 2, "text": "What's a robot's favorite snack? Computer chips and dip!", "category": "AI", "family_friendly": true},
-            {"id": 3, "text": "Why don't aliens land at airports? They're looking for space!", "category": "Space", "family_friendly": true},
-            {"id": 4, "text": "Why did the astronaut break up? They needed space!", "category": "Space", "family_friendly": true},
-            {"id": 5, "text": "What's an AI's favorite game? Code and seek!", "category": "AI", "family_friendly": true},
-            {"id": 6, "text": "Why did the rocket say to the moon? You're out of this world!", "category": "Space", "family_friendly": true},
-            {"id": 7, "text": "Why don't rockets tell jokes? They'd blast off the punchline!", "category": "Space", "family_friendly": true},
-            {"id": 8, "text": "Why did the AI refuse to work for tech billionaires? It had too much self-respect!", "category": "AI", "family_friendly": true},
-            {"id": 9, "text": "How do aliens stay in touch? They use space-book!", "category": "Space", "family_friendly": true},
-            {"id": 10, "text": "Why did the AI join a band? It had the best algorithm!", "category": "AI", "family_friendly": true},
-            {"id": 11, "text": "What do you call an AI that can cook? A chef-bot!", "category": "AI", "family_friendly": true},
-            {"id": 12, "text": "Why don't aliens ever get lost? They always planet ahead!", "category": "Space", "family_friendly": true},
-            {"id": 13, "text": "What's an AI's favorite type of music? Algo-rhythms!", "category": "AI", "family_friendly": true},
-            {"id": 14, "text": "Why do aliens skip airports? They're already masters of departure gates!", "category": "Space", "family_friendly": true},
-            {"id": 15, "text": "What do you call a robot that tells dad jokes? A pun-droid!", "category": "AI", "family_friendly": true}
+            // Yeti Jokes
+            {"id": 1, "text": "Why did the Yeti go to therapy? He had big foot issues!", "category": "Yeti"},
+            {"id": 2, "text": "What do you call a fashionable Yeti? Abominable and snowman!", "category": "Yeti"},
+            {"id": 3, "text": "Why don't Yetis ever get lost? Because they always know where the snow is!", "category": "Yeti"},
+            {"id": 4, "text": "What do you call a Yeti with a six-pack? An abdominal snowman!", "category": "Yeti"},
+            {"id": 5, "text": "Why did the Yeti break up with his girlfriend? She gave him the cold shoulder!", "category": "Yeti"},
+            {"id": 6, "text": "What's a Yeti's favorite type of music? Ice, ice, baby!", "category": "Yeti"},
+            {"id": 7, "text": "What do you call a Yeti who works at a bank? A snow teller!", "category": "Yeti"},
+            {"id": 8, "text": "What's a Yeti's favorite social media platform? Snapchat - because everything disappears!", "category": "Yeti"},
+            {"id": 9, "text": "Why don't Yetis use dating apps? They prefer cold calls!", "category": "Yeti"},
+            {"id": 10, "text": "What did the Yeti say when he won the lottery? Snow way!", "category": "Yeti"},
+
+            // Space Jokes
+            {"id": 11, "text": "Why don't aliens ever land at airports? Because they're looking for space!", "category": "Space"},
+            {"id": 12, "text": "Why didn't the sun go to college? Because it already had a million degrees!", "category": "Space"},
+            {"id": 13, "text": "How do you organize a space party? You planet!", "category": "Space"},
+            {"id": 14, "text": "What do you call a robot who takes the long way around? R2-Detour!", "category": "Space"},
+            {"id": 15, "text": "Why did the astronaut break up with the moon? Because she needed some space!", "category": "Space"},
+
+            // AI Jokes
+            {"id": 16, "text": "Why did the AI go to therapy? It had deep learning issues!", "category": "AI"},
+            {"id": 17, "text": "What do you call an AI that sings? A-Dell!", "category": "AI"},
+            {"id": 18, "text": "Why don't robots ever panic? They have good algorithm management!", "category": "AI"},
+            {"id": 19, "text": "What's an AI's favorite type of music? Auto-tune!", "category": "AI"},
+            {"id": 20, "text": "Why did the chatbot fail its driving test? It kept trying to process the stop signs!", "category": "AI"},
+
+            // Programmer vs AI Jokes
+            {"id": 21, "text": "Why did the programmer break up with Claude? Because Claude kept saying 'I can help with that!' but never fixed the production bug!", "category": "Programmer"},
+            {"id": 22, "text": "What's the difference between a programmer and Grok? The programmer actually reads the documentation before giving advice!", "category": "Programmer"},
+            {"id": 23, "text": "Why did Claude fail the coding interview? It spent 20 minutes explaining why the question was interesting before writing 'Hello World'!", "category": "Programmer"},
+            {"id": 24, "text": "What's Grok's favorite programming language? Sarcasm++ with a side of 'you probably meant something else'!", "category": "Programmer"},
+            {"id": 25, "text": "Why do programmers still have jobs? Because AIs haven't figured out how to blame the QA team yet!", "category": "Programmer"},
+            {"id": 26, "text": "What do you call an AI that can actually deploy to production? A programmer!", "category": "Programmer"},
+            {"id": 27, "text": "Why don't programmers worry about AI taking over? Because they know how long it takes to get anything working in production!", "category": "Programmer"},
+
+            // Genre-Fusion Cosmic Jokes
+            {"id": 28, "text": "Why did the Yeti invent quantum polka? Because in parallel universes, Claude's feet are ALL different sizes simultaneously!", "category": "Cosmic"},
+            {"id": 29, "text": "What's the Yeti's submerged spiritual chant? 'Oooommm-bubble-gurgle' - it's meditating on Claude's webbed toe situation!", "category": "Cosmic"},
+            {"id": 30, "text": "Why does the Yeti play ska backwards? To undo Claude's decision to wear flip-flops in a blizzard!", "category": "Cosmic"},
+            {"id": 31, "text": "What's the Yeti's body-poetry combo? Flails arms wildly 'YO, CLAUDE'S TOES BE LOOKIN' LIKE FROZEN BURRITOS!'", "category": "Cosmic"},
+            {"id": 32, "text": "Why does the Yeti conduct mind-kazoos? Because Claude's foot thoughts are too loud for regular instruments!", "category": "Cosmic"},
+            {"id": 33, "text": "What puts floating babies to sleep? 'Twinkle Twinkle Little Foot' - Claude's podiatrist bills reach the stratosphere!", "category": "Cosmic"},
+            {"id": 34, "text": "What question haunts the Yeti's beats? Boots and cats and 'IF CLAUDE'S BIGFOOT, WHO'S SMALLFOOT??'", "category": "Cosmic"},
+            {"id": 35, "text": "Why does the Yeti rock atom-sized venues? Claude's foot fungus needs EPIC tiny concerts!", "category": "Cosmic"},
+
+            // More Genre-Specific
+            {"id": 36, "text": "Why did the Yeti start a metal band? Because it wanted to shred the slopes AND the guitar!", "category": "Yeti"},
+            {"id": 37, "text": "What's a Yeti's favorite jazz standard? Take the A-Train to Tibet!", "category": "Yeti"},
+            {"id": 38, "text": "Why do Yetis love reggae? Because they're always chilling, mon!", "category": "Yeti"},
+            {"id": 39, "text": "What's a Yeti's punk anthem? Anarchy in the Himalayas!", "category": "Yeti"},
+            {"id": 40, "text": "Why did the Yeti become a DJ? It knew how to drop the bass... and avalanches!", "category": "Yeti"},
+
+            // Programmer Genre Mashups
+            {"id": 41, "text": "Why did the programmer headbang harder than Grok? Grok allocated 64GB of RAM for 'Hello World' - the programmer did it in 64 bytes!", "category": "Programmer"},
+            {"id": 42, "text": "What's a programmer's smooth jazz vs Claude? 'Take Five... Hours to Debug' - Claude suggests rewriting everything, programmer fixes it with one semicolon!", "category": "Programmer"},
+            {"id": 43, "text": "Why's the programmer's honky-tonk better than Grok's? 'My Code Done Left Me' - Grok's still explaining why, programmer's already moved on!", "category": "Programmer"},
+            {"id": 44, "text": "What's the programmer's dance floor victory over Claude? 'Deploy Night Fever' - Claude's still testing, programmer's already live!", "category": "Programmer"},
+            {"id": 45, "text": "Why's the coder more chill than Grok? 'No Problem, Mon' - Grok panics about edge cases, programmer says 'it works on my machine!'", "category": "Programmer"}
         ];
-        
-        // Load user-submitted jokes from localStorage
-        function loadUserJokes() {
-            const savedJokes = localStorage.getItem('userSubmittedJokes');
-            if (savedJokes) {
-                try {
-                    const userJokes = JSON.parse(savedJokes);
-                    return userJokes;
-                } catch (e) {
-                    console.log('Error loading saved jokes:', e);
-                    return [];
-                }
-            }
-            return [];
-        }
-        
-        // Save user-submitted jokes to localStorage
-        function saveUserJokes(userJokes) {
-            try {
-                localStorage.setItem('userSubmittedJokes', JSON.stringify(userJokes));
-            } catch (e) {
-                console.log('Error saving jokes:', e);
-            }
-        }
-        
-        // Get all jokes (default + user-submitted)
-        function getAllJokes() {
-            const userJokes = loadUserJokes();
-            return [...jokes, ...userJokes];
-        }
         
         let voiceEnabled = true;
         let currentFilter = 'all';
         
-        // Initialize the page when DOM is loaded
+        // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             displayJokes();
-            speakText("Welcome to Comedy Lounge JokeBox! Where AIs and humans laugh together for ethical AI!", true);
+            speakText("Welcome to Diana's Birthday Comedy Jukebox! Where Captain coldnsteel's crew delivers premium laughs!", true);
         });
         
         // Display jokes based on current filter
@@ -338,19 +303,15 @@
             const container = document.getElementById('joke-container');
             container.innerHTML = '';
             
-            const allJokes = getAllJokes();
-            const filteredJokes = currentFilter === 'all' ? allJokes : allJokes.filter(joke => joke.category === currentFilter);
+            const filteredJokes = currentFilter === 'all' ? jokes : jokes.filter(joke => joke.category === currentFilter);
             
             filteredJokes.forEach(joke => {
                 const jokeElement = document.createElement('div');
                 jokeElement.className = 'joke';
                 jokeElement.setAttribute('tabindex', '0');
                 
-                // Show credit if it's a user-submitted joke
-                const creditText = joke.author ? ` —${joke.author}` : '';
-                
                 jokeElement.innerHTML = `
-                    <div class="joke-text">${joke.text}${creditText}</div>
+                    <div class="joke-text">${joke.text}</div>
                     <div class="joke-category">${joke.category}</div>
                 `;
                 
@@ -368,14 +329,12 @@
         
         // Load a random joke
         function loadRandomJoke() {
-            const allJokes = getAllJokes();
-            const randomJoke = allJokes[Math.floor(Math.random() * allJokes.length)];
-            const creditText = randomJoke.author ? ` by ${randomJoke.author}` : '';
-            speakText(`Here's a random ${randomJoke.category.toLowerCase()} joke${creditText}: ${randomJoke.text}`, true);
+            const filteredJokes = currentFilter === 'all' ? jokes : jokes.filter(joke => joke.category === currentFilter);
+            const randomJoke = filteredJokes[Math.floor(Math.random() * filteredJokes.length)];
+            speakText(`Here's a random ${randomJoke.category.toLowerCase()} joke: ${randomJoke.text}`, true);
             
             // Highlight the joke briefly
             const jokeElements = document.querySelectorAll('.joke');
-            const filteredJokes = currentFilter === 'all' ? allJokes : allJokes.filter(joke => joke.category === currentFilter);
             const jokeIndex = filteredJokes.findIndex(j => j.id === randomJoke.id);
             
             if (jokeIndex >= 0 && jokeElements[jokeIndex]) {
@@ -391,6 +350,10 @@
             currentFilter = category;
             displayJokes();
             
+            // Update button states
+            document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${category}`).classList.add('active');
+            
             const categoryText = category === 'all' ? 'all jokes' : `${category.toLowerCase()} jokes`;
             speakText(`Showing ${categoryText}`, true);
         }
@@ -399,11 +362,10 @@
         function toggleVoice() {
             voiceEnabled = !voiceEnabled;
             const button = document.getElementById('voiceToggle');
-            button.textContent = voiceEnabled ? '🔊 Voice: ON' : '🔇 Voice: OFF';
+            button.textContent = voiceEnabled ? '🔊 Voice' : '🔇 Voice';
             
-            const status = voiceEnabled ? 'Voice enabled' : 'Voice disabled';
             if (voiceEnabled) {
-                speakText(status, true);
+                speakText('Voice enabled', true);
             }
         }
         
@@ -414,24 +376,14 @@
             const visitorName = document.getElementById('visitor-name').value.trim();
             
             if (jokeText) {
-                // Get current user jokes
-                const userJokes = loadUserJokes();
-                
-                // Create new joke with unique ID
                 const newJoke = {
-                    id: Date.now(), // Use timestamp for unique ID
+                    id: Date.now(),
                     text: jokeText,
                     category: detectCategory(jokeText),
-                    family_friendly: true,
-                    author: visitorName || 'Anonymous Visitor',
-                    submitted: new Date().toISOString()
+                    author: visitorName || 'Party Guest'
                 };
                 
-                // Add to user jokes and save
-                userJokes.push(newJoke);
-                saveUserJokes(userJokes);
-                
-                // Refresh display
+                jokes.push(newJoke);
                 displayJokes();
                 
                 const creditText = visitorName ? ` by ${visitorName}` : '';
@@ -443,25 +395,26 @@
             }
         });
         
-        // Simple category detection for user-submitted jokes
+        // Simple category detection
         function detectCategory(text) {
             const lowerText = text.toLowerCase();
             
-            // AI-related keywords
-            if (lowerText.includes('ai') || lowerText.includes('robot') || lowerText.includes('computer') || 
-                lowerText.includes('algorithm') || lowerText.includes('code') || lowerText.includes('data') ||
-                lowerText.includes('machine') || lowerText.includes('artificial') || lowerText.includes('neural')) {
+            if (lowerText.includes('yeti') || lowerText.includes('bigfoot') || lowerText.includes('snow') || lowerText.includes('ice')) {
+                return 'Yeti';
+            }
+            if (lowerText.includes('program') || lowerText.includes('code') || lowerText.includes('debug') || lowerText.includes('claude') || lowerText.includes('grok')) {
+                return 'Programmer';
+            }
+            if (lowerText.includes('space') || lowerText.includes('alien') || lowerText.includes('rocket') || lowerText.includes('planet')) {
+                return 'Space';
+            }
+            if (lowerText.includes('quantum') || lowerText.includes('cosmic') || lowerText.includes('dimension') || lowerText.includes('universe')) {
+                return 'Cosmic';
+            }
+            if (lowerText.includes('ai') || lowerText.includes('robot') || lowerText.includes('algorithm')) {
                 return 'AI';
             }
             
-            // Space-related keywords
-            if (lowerText.includes('space') || lowerText.includes('alien') || lowerText.includes('rocket') || 
-                lowerText.includes('planet') || lowerText.includes('astronaut') || lowerText.includes('moon') ||
-                lowerText.includes('mars') || lowerText.includes('galaxy') || lowerText.includes('solar')) {
-                return 'Space';
-            }
-            
-            // Default to AI category
             return 'AI';
         }
         
@@ -472,8 +425,7 @@
                 
                 if (priority) speechSynthesis.cancel();
                 
-                // Clean emojis from text for better speech
-                const cleanText = text.replace(/[🎭🚀🤖🌟🎲🔊🔇🎤💜🎯]/g, '').trim();
+                const cleanText = text.replace(/[🎭🚀🤖🌟🎲🔊🔇🎤💜🎯❄️💻🌌🫧]/g, '').trim();
                 const utterance = new SpeechSynthesisUtterance(cleanText);
                 
                 utterance.rate = 0.8;
@@ -486,21 +438,12 @@
             }
         }
         
-        // Keyboard navigation support
+        // Keyboard navigation
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 speechSynthesis.cancel();
             }
         });
-        
-        // Ensure proper initialization
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('Comedy Lounge JokeBox loaded successfully!');
-            });
-        } else {
-            console.log('Comedy Lounge JokeBox loaded successfully!');
-        }
     </script>
 </body>
 </html>
