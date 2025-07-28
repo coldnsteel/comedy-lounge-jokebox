@@ -124,6 +124,13 @@
             letter-spacing: 1px;
         }
         
+        .joke-author {
+            color: #cccccc;
+            font-size: 0.8rem;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
         .submit-form {
             background: rgba(51, 0, 102, 0.3);
             border-radius: 15px;
@@ -161,6 +168,23 @@
             color: #ccc;
         }
         
+        .success-message {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .stats {
+            background: rgba(51, 0, 102, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        
         .footer {
             margin-top: 50px;
             padding: 20px;
@@ -189,9 +213,14 @@
         <h1>🎭 Comedy Lounge JokeBox 🚀</h1>
         
         <div class="manifesto">
-            <h2>🎂 Diana's 22nd Birthday Edition! 🫧</h2>
+            <h2>🫧 POP! Bubble Party Edition! 🎭</h2>
             <p>Premium comedy collection featuring Yeti wisdom, programmer vs AI battles, cosmic genre-fusion jokes, and interdimensional humor! From Captain coldnsteel's *ψΩ§∞* crew - where AIs and humans laugh together!</p>
-            <p><em>—Party Favor from Diana's Dutch/Belgian Bubble Bash</em></p>
+            <p><em>—Party Favor developed for Dee Bubble - customize for any birthday celebration!</em></p>
+        </div>
+        
+        <div class="stats">
+            <h3>📊 JokeBox Stats</h3>
+            <p>Total Jokes: <span id="total-jokes">45</span> | User Submissions: <span id="user-jokes">0</span> | Categories: <span id="total-categories">6</span></p>
         </div>
         
         <div class="controls">
@@ -203,6 +232,8 @@
             <button onclick="filterJokes('Space')" id="btn-Space">🚀 Space</button>
             <button onclick="filterJokes('Programmer')" id="btn-Programmer">💻 Coder</button>
             <button onclick="filterJokes('Cosmic')" id="btn-Cosmic">🌌 Cosmic</button>
+            <button onclick="filterJokes('User')" id="btn-User">👤 User</button>
+            <button onclick="exportJokes()">💾 Export</button>
         </div>
         
         <div id="joke-container" class="joke-container">
@@ -211,6 +242,9 @@
         
         <div class="submit-form">
             <h3>🎤 Submit Your Joke!</h3>
+            <div class="success-message" id="success-message">
+                ✅ Joke saved successfully! It's now part of the permanent collection.
+            </div>
             <form id="joke-form">
                 <div class="form-group">
                     <input type="text" id="visitor-name" placeholder="Your name (optional)" style="flex: 0 0 200px;">
@@ -218,11 +252,14 @@
                     <button type="submit">🚀 Launch!</button>
                 </div>
             </form>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #ccc;">
+                💡 Your jokes are automatically saved and will persist between visits!
+            </p>
         </div>
         
         <div class="footer">
-            <p>🎂 Diana's 22nd Birthday Party Favor | Made with *ψΩ§∞* magic</p>
-            <p>From Captain coldnsteel's Dutch/Belgian Bubble Bash crew!</p>
+            <p>🫧 POP! Bubble Party Favor | Made with *ψΩ§∞* magic</p>
+            <p>From Captain coldnsteel's Dee Bubble party crew - customize for any celebration!</p>
         </div>
     </div>
 
@@ -291,11 +328,52 @@
         
         let voiceEnabled = true;
         let currentFilter = 'all';
+        let userJokeCount = 0;
+        
+        // Load saved jokes from storage and update counter
+        function loadSavedJokes() {
+            try {
+                const savedJokes = JSON.parse(window.localStorage?.getItem('userJokes') || '[]');
+                if (savedJokes.length > 0) {
+                    // Add saved jokes to the main collection
+                    savedJokes.forEach(savedJoke => {
+                        if (!jokes.find(j => j.id === savedJoke.id)) {
+                            jokes.push(savedJoke);
+                        }
+                    });
+                }
+                userJokeCount = savedJokes.length;
+                updateStats();
+            } catch (error) {
+                console.log('Could not load saved jokes - storage not available');
+                userJokeCount = 0;
+            }
+        }
+        
+        // Save user jokes to storage
+        function saveUserJokes() {
+            try {
+                const userJokes = jokes.filter(joke => joke.category === 'User' || joke.author);
+                window.localStorage?.setItem('userJokes', JSON.stringify(userJokes));
+            } catch (error) {
+                console.log('Could not save jokes - storage not available');
+            }
+        }
+        
+        // Update statistics display
+        function updateStats() {
+            document.getElementById('total-jokes').textContent = jokes.length;
+            document.getElementById('user-jokes').textContent = userJokeCount;
+            
+            const categories = [...new Set(jokes.map(j => j.category))];
+            document.getElementById('total-categories').textContent = categories.length;
+        }
         
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
+            loadSavedJokes();
             displayJokes();
-            speakText("Welcome to Diana's Birthday Comedy Jukebox! Where Captain coldnsteel's crew delivers premium laughs!", true);
+            speakText("Welcome to the POP Bubble Comedy Jukebox! Where Captain coldnsteel's crew delivers premium laughs!", true);
         });
         
         // Display jokes based on current filter
@@ -310,9 +388,12 @@
                 jokeElement.className = 'joke';
                 jokeElement.setAttribute('tabindex', '0');
                 
+                const authorDisplay = joke.author ? `<div class="joke-author">- ${joke.author}</div>` : '';
+                
                 jokeElement.innerHTML = `
                     <div class="joke-text">${joke.text}</div>
                     <div class="joke-category">${joke.category}</div>
+                    ${authorDisplay}
                 `;
                 
                 jokeElement.onclick = () => speakText(joke.text);
@@ -325,6 +406,8 @@
                 
                 container.appendChild(jokeElement);
             });
+            
+            updateStats();
         }
         
         // Load a random joke
@@ -369,6 +452,27 @@
             }
         }
         
+        // Export jokes functionality
+        function exportJokes() {
+            const userJokes = jokes.filter(joke => joke.category === 'User' || joke.author);
+            const exportData = {
+                exportDate: new Date().toISOString(),
+                totalJokes: jokes.length,
+                userSubmissions: userJokes.length,
+                jokes: userJokes
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `jokebox-export-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            speakText(`Exported ${userJokes.length} user jokes to file`, true);
+        }
+        
         // Handle form submission for new jokes
         document.getElementById('joke-form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -380,14 +484,29 @@
                     id: Date.now(),
                     text: jokeText,
                     category: detectCategory(jokeText),
-                    author: visitorName || 'Party Guest'
+                    author: visitorName || 'Anonymous User',
+                    timestamp: new Date().toISOString()
                 };
                 
+                // Add to main collection
                 jokes.push(newJoke);
+                userJokeCount++;
+                
+                // Save to persistent storage
+                saveUserJokes();
+                
+                // Update display
                 displayJokes();
                 
+                // Show success message
+                const successMsg = document.getElementById('success-message');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+                
                 const creditText = visitorName ? ` by ${visitorName}` : '';
-                speakText(`New ${newJoke.category.toLowerCase()} joke added${creditText}: ${jokeText}`, true);
+                speakText(`New ${newJoke.category.toLowerCase()} joke added${creditText} and saved permanently: ${jokeText}`, true);
                 
                 // Clear form
                 document.getElementById('new-joke').value = '';
@@ -415,7 +534,7 @@
                 return 'AI';
             }
             
-            return 'AI';
+            return 'User';
         }
         
         // Text-to-speech functionality
@@ -425,7 +544,7 @@
                 
                 if (priority) speechSynthesis.cancel();
                 
-                const cleanText = text.replace(/[🎭🚀🤖🌟🎲🔊🔇🎤💜🎯❄️💻🌌🫧]/g, '').trim();
+                const cleanText = text.replace(/[🎭🚀🤖🌟🎲🔊🔇🎤💜🎯❄️💻🌌🫧✅💡💾👤📊]/g, '').trim();
                 const utterance = new SpeechSynthesisUtterance(cleanText);
                 
                 utterance.rate = 0.8;
